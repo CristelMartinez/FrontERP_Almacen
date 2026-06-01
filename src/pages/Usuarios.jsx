@@ -20,13 +20,10 @@ import {
 /* ─── ROL BADGE ──────────────────────────────────────────────── */
 function RolBadge({ rol }) {
   const esAdmin = rol?.toLowerCase() === "administrador" || rol?.toLowerCase() === "admin"
-
   return (
     <span
       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-        esAdmin
-          ? "bg-blue-50 text-blue-700"
-          : "bg-gray-100 text-gray-600"
+        esAdmin ? "bg-blue-50 text-blue-700" : "bg-gray-100 text-gray-600"
       }`}
     >
       {rol}
@@ -36,12 +33,13 @@ function RolBadge({ rol }) {
 
 /* ─── AVATAR ─────────────────────────────────────────────────── */
 function Avatar({ nombre }) {
-  const iniciales = nombre
-    ?.split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((n) => n[0].toUpperCase())
-    .join("") || "U"
+  const iniciales =
+    nombre
+      ?.split(" ")
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((n) => n[0].toUpperCase())
+      .join("") || "U"
 
   return (
     <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
@@ -116,7 +114,6 @@ export default function Usuarios() {
     )
   })
 
-  /* CONTADORES */
   const totalActivos   = usuarios.filter((u) => u.activo).length
   const totalInactivos = usuarios.filter((u) => !u.activo).length
 
@@ -125,11 +122,11 @@ export default function Usuarios() {
       key: "nombre",
       label: "Usuario",
       render: (row) => (
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 min-w-[160px]">
           <Avatar nombre={row.nombre} />
-          <div>
-            <p className="text-sm text-gray-700 font-medium leading-tight">{row.nombre}</p>
-            <p className="text-xs text-gray-400 leading-tight">{row.correo}</p>
+          <div className="min-w-0">
+            <p className="text-sm text-gray-700 font-medium leading-tight truncate">{row.nombre}</p>
+            <p className="text-xs text-gray-400 leading-tight truncate">{row.correo}</p>
           </div>
         </div>
       ),
@@ -149,26 +146,17 @@ export default function Usuarios() {
       label: "Acciones",
       render: (row) => (
         <div className="flex items-center gap-1">
-
-          {/* EDITAR */}
           <button
-            onClick={() => {
-              setUsuarioSeleccionado(row)
-              setMostrarModal(true)
-            }}
+            onClick={() => { setUsuarioSeleccionado(row); setMostrarModal(true) }}
             className="p-1.5 rounded-md text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition"
             title="Editar usuario"
           >
             <FiEdit2 size={14} />
           </button>
 
-          {/* CAMBIAR CONTRASEÑA — solo admin */}
           {esAdmin && (
             <button
-              onClick={() => {
-                setUsuarioPassword(row)
-                setMostrarModalPassword(true)
-              }}
+              onClick={() => { setUsuarioPassword(row); setMostrarModalPassword(true) }}
               className="p-1.5 rounded-md text-gray-400 hover:text-amber-500 hover:bg-amber-50 transition"
               title="Cambiar contraseña"
             >
@@ -176,7 +164,6 @@ export default function Usuarios() {
             </button>
           )}
 
-          {/* TOGGLE ACTIVO / INACTIVO */}
           {row.activo ? (
             <button
               onClick={() => toggleUsuario(row)}
@@ -194,7 +181,6 @@ export default function Usuarios() {
               <FiRefreshCw size={14} />
             </button>
           )}
-
         </div>
       ),
     },
@@ -212,10 +198,7 @@ export default function Usuarios() {
           </p>
         </div>
         <button
-          onClick={() => {
-            setUsuarioSeleccionado(null)
-            setMostrarModal(true)
-          }}
+          onClick={() => { setUsuarioSeleccionado(null); setMostrarModal(true) }}
           className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition flex-shrink-0"
         >
           <FiPlus size={15} />
@@ -243,10 +226,7 @@ export default function Usuarios() {
 
       {/* BUSCADOR */}
       <div className="relative w-full sm:max-w-sm">
-        <FiSearch
-          size={14}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300"
-        />
+        <FiSearch size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300" />
         <input
           type="text"
           placeholder="Buscar por nombre, correo o rol..."
@@ -265,7 +245,7 @@ export default function Usuarios() {
       </div>
 
       {/* TABLA */}
-      <div className="bg-white rounded-xl border border-gray-100">
+      <div className="bg-white rounded-xl border border-gray-100 overflow-x-auto">
         {cargando ? (
           <div className="flex items-center justify-center py-20">
             <div className="w-5 h-5 border-2 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
@@ -286,10 +266,7 @@ export default function Usuarios() {
       {/* MODALES */}
       {mostrarModal && (
         <ModalUsuario
-          cerrar={() => {
-            setMostrarModal(false)
-            setUsuarioSeleccionado(null)
-          }}
+          cerrar={() => { setMostrarModal(false); setUsuarioSeleccionado(null) }}
           recargar={cargarUsuarios}
           usuario={usuarioSeleccionado}
         />
@@ -297,10 +274,7 @@ export default function Usuarios() {
 
       {mostrarModalPassword && (
         <ModalCambiarPassword
-          cerrar={() => {
-            setMostrarModalPassword(false)
-            setUsuarioPassword(null)
-          }}
+          cerrar={() => { setMostrarModalPassword(false); setUsuarioPassword(null) }}
           usuario={usuarioPassword}
         />
       )}
@@ -308,10 +282,7 @@ export default function Usuarios() {
       {mostrarModalEliminar && (
         <ModalEliminarUsuario
           usuario={usuarioEliminar}
-          cerrar={() => {
-            setMostrarModalEliminar(false)
-            setUsuarioEliminar(null)
-          }}
+          cerrar={() => { setMostrarModalEliminar(false); setUsuarioEliminar(null) }}
           confirmar={eliminarUsuario}
         />
       )}

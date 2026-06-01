@@ -77,7 +77,7 @@ export default function CatalogoPage({
       </div>
 
       {/* TABLA */}
-      <div className="bg-white rounded-xl border border-gray-100">
+      <div className="bg-white rounded-xl border border-gray-100 overflow-x-auto">
         <Table columns={columns} data={data} />
       </div>
 
