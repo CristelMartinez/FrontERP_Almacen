@@ -158,7 +158,7 @@ export default function Dashboard() {
       </div>
 
       {/* TABLAS */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
         {/* ÚLTIMOS MOVIMIENTOS */}
         <div className="bg-white border border-gray-100 rounded-xl overflow-hidden">

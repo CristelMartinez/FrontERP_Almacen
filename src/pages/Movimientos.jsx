@@ -166,7 +166,7 @@ export default function Movimientos() {
     <div className="flex flex-col gap-5">
 
       {/* ENCABEZADO */}
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-lg font-semibold text-gray-800">Movimientos</h1>
           <p className="text-sm text-gray-400 mt-0.5">
@@ -175,7 +175,7 @@ export default function Movimientos() {
         </div>
 
         {/* BOTONES ENTRADA / SALIDA */}
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => setMostrarEntrada(true)}
             className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition"
@@ -209,7 +209,7 @@ export default function Movimientos() {
       </div>
 
       {/* BUSCADOR */}
-      <div className="relative max-w-sm">
+      <div className="relative w-full sm:max-w-sm">
         <FiSearch
           size={14}
           className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300"

@@ -30,7 +30,7 @@ export default function CatalogoPage({
     <div className="flex flex-col gap-5">
 
       {/* HEADER */}
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-3">
 
         {/* TÍTULO */}
         <div>
@@ -41,7 +41,7 @@ export default function CatalogoPage({
         </div>
 
         {/* ACCIONES */}
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-center gap-2 flex-shrink-0 flex-wrap">
 
           {onInactivos && (
             <button

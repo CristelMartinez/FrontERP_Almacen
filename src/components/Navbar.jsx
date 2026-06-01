@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom"
-import { FiLogOut, FiBell } from "react-icons/fi"
+import { FiLogOut, FiBell, FiMenu } from "react-icons/fi"
 
 const rutas = {
   "/dashboard":                      ["Dashboard"],
@@ -36,12 +36,16 @@ function getIniciales(nombre = "") {
     .join("")
 }
 
-export default function Navbar() {
+/**
+ * Props:
+ *  onMenuClick  fn  — abre el sidebar en móvil (viene de MainLayout)
+ */
+export default function Navbar({ onMenuClick }) {
   const navigate  = useNavigate()
   const location  = useLocation()
 
-  const partes  = rutas[location.pathname] ?? ["Dashboard"]
-  const usuario = JSON.parse(localStorage.getItem("usuario") ?? "{}")
+  const partes    = rutas[location.pathname] ?? ["Dashboard"]
+  const usuario   = JSON.parse(localStorage.getItem("usuario") ?? "{}")
   const iniciales = getIniciales(usuario?.nombre)
 
   const cerrarSesion = () => {
@@ -51,32 +55,50 @@ export default function Navbar() {
   }
 
   return (
-    <header className="h-14 bg-white border-b border-gray-100 flex items-center justify-between px-6 shrink-0">
+    <header className="h-14 bg-white border-b border-gray-100 flex items-center justify-between px-4 sm:px-6 shrink-0">
 
-      {/* BREADCRUMB */}
-      <nav className="flex items-center gap-1.5 text-sm" aria-label="Breadcrumb">
-        <span className="text-gray-400">Inicio</span>
+      {/* IZQUIERDA — hamburguesa (móvil) + breadcrumb */}
+      <div className="flex items-center gap-3 min-w-0">
 
-        {partes.map((parte, i) => (
-          <span key={i} className="flex items-center gap-1.5">
-            <span className="text-gray-300 text-xs">/</span>
-            <span
-              className={
-                i === partes.length - 1
-                  ? "text-gray-800 font-medium"
-                  : "text-gray-400"
-              }
-            >
-              {parte}
+        {/* HAMBURGUESA — solo móvil */}
+        <button
+          onClick={onMenuClick}
+          className="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 transition shrink-0"
+          aria-label="Abrir menú"
+        >
+          <FiMenu size={18} />
+        </button>
+
+        {/* BREADCRUMB */}
+        <nav
+          className="flex items-center gap-1.5 text-sm min-w-0 overflow-hidden"
+          aria-label="Breadcrumb"
+        >
+          <span className="text-gray-400 hidden sm:block shrink-0">Inicio</span>
+
+          {partes.map((parte, i) => (
+            <span key={i} className="flex items-center gap-1.5 min-w-0">
+              <span className="text-gray-300 text-xs hidden sm:block">/</span>
+              <span
+                className={[
+                  "truncate",
+                  i === partes.length - 1
+                    ? "text-gray-800 font-medium"
+                    : "text-gray-400 hidden sm:block",
+                ].join(" ")}
+              >
+                {parte}
+              </span>
             </span>
-          </span>
-        ))}
-      </nav>
+          ))}
+        </nav>
 
-      {/* ACCIONES */}
-      <div className="flex items-center gap-3">
+      </div>
 
-        {/* NOTIFICACIONES (placeholder) */}
+      {/* DERECHA — notificaciones + usuario + logout */}
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+
+        {/* NOTIFICACIONES */}
         <button
           className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-gray-600 transition"
           aria-label="Notificaciones"
@@ -90,14 +112,15 @@ export default function Navbar() {
         {/* USUARIO */}
         <div className="flex items-center gap-2">
           <div
-            className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center"
+            className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center shrink-0"
             title={usuario?.nombre}
           >
             <span className="text-[11px] font-semibold text-blue-700 leading-none">
               {iniciales || "U"}
             </span>
           </div>
-          <span className="text-sm text-gray-600 hidden sm:block">
+          {/* Nombre — oculto en móvil pequeño */}
+          <span className="text-sm text-gray-600 hidden md:block">
             {usuario?.nombre || "Usuario"}
           </span>
         </div>

@@ -208,7 +208,7 @@ export default function Apartados() {
     <div className="flex flex-col gap-5">
 
       {/* ENCABEZADO */}
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-lg font-semibold text-gray-800">Apartados</h1>
           <p className="text-sm text-gray-400 mt-0.5">
@@ -241,7 +241,7 @@ export default function Apartados() {
       </div>
 
       {/* BUSCADOR */}
-      <div className="relative max-w-sm">
+      <div className="relative w-full sm:max-w-sm">
         <FiSearch
           size={14}
           className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300"
