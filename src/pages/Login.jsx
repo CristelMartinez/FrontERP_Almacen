@@ -1,11 +1,11 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import toast from "react-hot-toast"
-import { FiMail, FiLock, FiEye, FiEyeOff, FiBox } from "react-icons/fi"
+import { FiMail, FiLock, FiEye, FiEyeOff, FiBox, FiUser } from "react-icons/fi"
 import api from "../api/api"
 
 export default function Login() {
-  const [correo, setCorreo] = useState("")
+  const [nombre, setNombre] = useState("")
   const [password, setPassword] = useState("")
   const [verPassword, setVerPassword] = useState(false)
   const [cargando, setCargando] = useState(false)
@@ -15,15 +15,15 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault()
 
-    if (!correo || !password) {
-      toast.error("Correo y contraseña son obligatorios")
+    if (!nombre || !password) {
+      toast.error("Nombre de usuario y contraseña son obligatorios")
       return
     }
 
     setCargando(true)
 
     try {
-      const res = await api.post("/auth/login", { correo, password })
+      const res = await api.post("/auth/login", { nombre, password })
 
       localStorage.setItem("token", res.data.token)
       localStorage.setItem("usuario", JSON.stringify(res.data.usuario))
@@ -103,22 +103,22 @@ export default function Login() {
           {/* FORMULARIO */}
           <form onSubmit={handleLogin} className="space-y-5">
 
-            {/* CORREO */}
+            {/* NOMBRE DE USUARIO */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold uppercase tracking-wider text-gray-400">
-                Correo electrónico
+                Nombre de usuario
               </label>
               <div className="relative">
-                <FiMail
+                <FiUser
                   size={15}
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300"
                 />
                 <input
-                  type="email"
-                  value={correo}
-                  onChange={(e) => setCorreo(e.target.value)}
-                  placeholder="usuario@empresa.com"
-                  autoComplete="email"
+                  type="text"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  placeholder="nombre de usuario"
+                  autoComplete="username"
                   className="w-full pl-9 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition"
                 />
               </div>
