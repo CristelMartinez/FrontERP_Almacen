@@ -1,181 +1,126 @@
 import { useState } from "react"
 import api from "../../api/api"
-import { FiFileText, FiDownload } from "react-icons/fi"
+import { toast } from "react-hot-toast"
 import Table from "../../components/Table"
+import ReporteLayout from "../../components/ReporteLayout"
+import DateFilter from "../../components/DateFilter"
 
-const ReporteApartados = () => {
+const columns = [
+  {
+    key: "fecha",
+    label: "Fecha",
+    render: (row) => (
+      <span className="text-xs text-gray-400">
+        {new Date(row.fecha).toLocaleDateString("es-MX", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })}
+      </span>
+    ),
+  },
+  {
+    key: "folio",
+    label: "Folio",
+    render: (row) => (
+      <span className="font-mono text-xs bg-gray-50 text-gray-500 px-2 py-0.5 rounded">
+        {row.folio || "—"}
+      </span>
+    ),
+  },
+  {
+    key: "numero_pedido",
+    label: "No. Pedido",
+    render: (row) => (
+      <span className="text-xs text-gray-500">{row.numero_pedido || "—"}</span>
+    ),
+  },
+  {
+    key: "sku",
+    label: "SKU",
+    render: (row) => (
+      <span className="font-mono text-xs text-gray-500">{row.sku || "—"}</span>
+    ),
+  },
+  {
+    key: "producto",
+    label: "Producto",
+    render: (row) => (
+      <div>
+        <p className="text-gray-800 font-medium text-sm">{row.producto}</p>
+        {row.modelo && (
+          <p className="text-gray-400 text-xs mt-0.5">{row.modelo}</p>
+        )}
+      </div>
+    ),
+  },
+]
 
+export default function ReporteApartados() {
   const [fechaInicio, setFechaInicio] = useState("")
   const [fechaFin, setFechaFin] = useState("")
   const [datos, setDatos] = useState([])
+  const [cargando, setCargando] = useState(false)
 
-  // 🔥 GENERAR REPORTE
+  const params = () => ({
+    ...(fechaInicio && { fecha_inicio: fechaInicio }),
+    ...(fechaFin && { fecha_fin: fechaFin }),
+  })
+
   const generarReporte = async () => {
+    setCargando(true)
     try {
-
-      const res = await api.get("/reportes/apartados", {
-        params: {
-          ...(fechaInicio && { fecha_inicio: fechaInicio }),
-          ...(fechaFin && { fecha_fin: fechaFin })
-        }
-      })
-
+      const res = await api.get("/reportes/apartados", { params: params() })
       setDatos(res.data)
-
-    } catch (error) {
-      console.error("Error generando reporte", error)
+    } catch {
+      toast.error("Error generando reporte")
+    } finally {
+      setCargando(false)
     }
   }
 
-  // 🔥 EXCEL
-  const descargarExcel = async () => {
+  const descargar = async (format, nombre) => {
     try {
-
       const res = await api.get("/reportes/apartados", {
-        params: {
-          ...(fechaInicio && { fecha_inicio: fechaInicio }),
-          ...(fechaFin && { fecha_fin: fechaFin }),
-          format: "xlsx"
-        },
-        responseType: "blob"
+        params: { ...params(), format },
+        responseType: "blob",
       })
-
       const url = window.URL.createObjectURL(new Blob([res.data]))
       const link = document.createElement("a")
-
       link.href = url
-      link.setAttribute("download", "apartados.xlsx")
-
+      link.setAttribute("download", nombre)
       document.body.appendChild(link)
       link.click()
-
-    } catch (error) {
-      console.error("Error descargando Excel", error)
+      link.remove()
+    } catch {
+      toast.error(`Error al descargar ${format.toUpperCase()}`)
     }
   }
-
-  // 🔥 PDF
-  const descargarPDF = async () => {
-    try {
-
-      const res = await api.get("/reportes/apartados", {
-        params: {
-          ...(fechaInicio && { fecha_inicio: fechaInicio }),
-          ...(fechaFin && { fecha_fin: fechaFin }),
-          format: "pdf"
-        },
-        responseType: "blob"
-      })
-
-      const url = window.URL.createObjectURL(new Blob([res.data]))
-      const link = document.createElement("a")
-
-      link.href = url
-      link.setAttribute("download", "apartados.pdf")
-
-      document.body.appendChild(link)
-      link.click()
-
-    } catch (error) {
-      console.error("Error descargando PDF", error)
-    }
-  }
-
-  // 🔥 COLUMNAS
-  const columns = [
-    {
-      key: "fecha",
-      label: "Fecha",
-      render: (row) =>
-        new Date(row.fecha).toLocaleDateString()
-    },
-    {
-      key: "folio",
-      label: "Folio"
-    },
-    {
-      key: "numero_pedido",
-      label: "No. Pedido"
-    },
-    {
-      key: "sku",
-      label: "SKU"
-    },
-    {
-      key: "producto",
-      label: "Producto"
-    },
-    {
-      key: "modelo",
-      label: "Modelo",
-      render: (row) => row.modelo || "N/A"
-    }
-  ]
 
   return (
-
-    <div className="p-4 sm:p-6">
-
-      <h1 className="text-xl sm:text-2xl font-semibold mb-6 flex items-center gap-2">
-        <FiFileText />
-        Reporte de Apartados
-      </h1>
-
-      {/* 🔥 FILTROS */}
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6">
-
-        <input
-          type="date"
-          value={fechaInicio}
-          onChange={(e) => setFechaInicio(e.target.value)}
-          className="border rounded px-3 py-2 w-full sm:w-auto"
+    <ReporteLayout
+      titulo="Apartados"
+      subtitulo="Detalle de apartados realizados por rango de fechas"
+      onExcelClick={datos.length ? () => descargar("xlsx", "apartados.xlsx") : null}
+      onPDFClick={datos.length ? () => descargar("pdf", "apartados.pdf") : null}
+      filtros={
+        <DateFilter
+          fechaInicio={fechaInicio}
+          fechaFin={fechaFin}
+          onChangeInicio={setFechaInicio}
+          onChangeFin={setFechaFin}
+          onGenerar={generarReporte}
+          cargando={cargando}
         />
-
-        <input
-          type="date"
-          value={fechaFin}
-          onChange={(e) => setFechaFin(e.target.value)}
-          className="border rounded px-3 py-2 w-full sm:w-auto"
-        />
-
-        <button
-          onClick={generarReporte}
-          className="bg-blue-600 text-white px-4 py-2 rounded w-full sm:w-auto"
-        >
-          Generar reporte
-        </button>
-
-      </div>
-
-      {/* 🔥 EXPORTAR */}
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6">
-
-        <button
-          onClick={descargarExcel}
-          className="bg-green-600 text-white px-4 py-2 rounded flex items-center justify-center gap-2 w-full sm:w-auto"
-        >
-          <FiDownload />
-          Excel
-        </button>
-
-        <button
-          onClick={descargarPDF}
-          className="bg-red-600 text-white px-4 py-2 rounded flex items-center justify-center gap-2 w-full sm:w-auto"
-        >
-          <FiDownload />
-          PDF
-        </button>
-
-      </div>
-
-      {/* 🔥 TABLA */}
-      <div className="bg-white rounded-xl shadow-lg p-8">
+      }
+    >
+      {cargando ? (
+        <div className="flex items-center justify-center py-20">
+          <span className="w-5 h-5 border-2 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+        </div>
+      ) : (
         <Table columns={columns} data={datos} />
-      </div>
-
-    </div>
-
+      )}
+    </ReporteLayout>
   )
 }
-
-export default ReporteApartados
