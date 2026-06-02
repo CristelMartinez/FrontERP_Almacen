@@ -49,7 +49,7 @@ export default function ModalUsuario({ cerrar, recargar, usuario }) {
       const res = await api.get("/catalogos")
 
       setRoles(res.data.roles)
-      setDepartamentos(res.data.categorias)
+      setDepartamentos(res.data.departamentos)
 
     } catch (error) {
 
