@@ -25,24 +25,14 @@ export default function Configuracion() {
       icono: <FiTruck size={28} />,
       ruta: "/configuracion/proveedores"
     },
-    {
-      titulo: "Almacenes",
-      descripcion: "Gestionar almacenes del sistema",
-      icono: <FiHome size={28} />,
-      ruta: "/configuracion/almacenes"
-    },
+    /*Aqui va almacenes Endpoinst y logica listos*/
     {
       titulo: "Departamentos",
       descripcion: "Áreas que solicitan materiales",
       icono: <FiUsers size={28} />,
       ruta: "/configuracion/departamentos"
     },
-    {
-      titulo: "Tipos de movimiento",
-      descripcion: "Configurar entradas y salidas",
-      icono: <FiRefreshCw size={28} />,
-      ruta: "/configuracion/tipos-movimiento"
-    },
+    /*Aqui puede ir tipos de movimientos Endpoints listos*/
     {
       titulo: "Ubicaciones",
       descripcion: "Configurar las ubicaciones de los estantes",

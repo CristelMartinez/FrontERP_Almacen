@@ -1,7 +1,13 @@
 import { useState } from "react"
-import Modal from "../Modal"
+import { FiSave, FiX } from "react-icons/fi"
 
-export default function ModalNuevoDepartamento({ cerrar, guardar }) {
+import Modal from "../Modal"
+import InputField from "../InputField"
+
+export default function ModalNuevoDepartamento({
+  cerrar,
+  guardar
+}) {
 
   const [nombre, setNombre] = useState("")
 
@@ -19,48 +25,81 @@ export default function ModalNuevoDepartamento({ cerrar, guardar }) {
 
   return (
 
-    <Modal>
+    <Modal ancho="max-w-xl">
 
-      {/* Título */}
-      <h2 className="text-xl font-semibold text-center mb-6">
-        Nuevo Departamento
-      </h2>
-
-      {/* Formulario */}
-      <div className="space-y-4">
+      {/* HEADER */}
+      <div className="flex items-center justify-between mb-6">
 
         <div>
+          <h2 className="text-base font-semibold text-gray-800">
+            Nuevo departamento
+          </h2>
 
-          <label className="block text-sm text-gray-600 mb-1">
-            Nombre
-          </label>
-
-          <input
-            type="text"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Nombre del departamento"
-          />
-
+          <p className="text-xs text-gray-400 mt-0.5">
+            Registrar nuevo departamento
+          </p>
         </div>
-
-      </div>
-
-      {/* Botones */}
-      <div className="flex justify-center gap-6 mt-8">
 
         <button
           onClick={cerrar}
-          className="px-6 py-2 bg-gray-200 rounded-lg shadow hover:bg-gray-300"
+          className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition"
         >
+          <FiX size={16} />
+        </button>
+
+      </div>
+
+      {/* FORM */}
+      <div className="space-y-4">
+
+        <InputField
+          label="Nombre"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+          placeholder="Nombre del departamento"
+        />
+
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-6 pt-5 border-t border-gray-100">
+
+        <button
+          onClick={cerrar}
+          className="
+            w-full sm:w-auto
+            flex items-center justify-center gap-2
+            px-4 py-2
+            text-sm
+            text-gray-600
+            bg-white
+            border border-gray-200
+            rounded-lg
+            hover:bg-gray-50
+            transition
+          "
+        >
+          <FiX size={14} />
           Cancelar
         </button>
 
         <button
           onClick={handleGuardar}
-          className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"
+          className="
+            w-full sm:w-auto
+            flex items-center justify-center gap-2
+            px-4 py-2
+            text-sm
+            font-medium
+            bg-blue-600
+            text-white
+            rounded-lg
+            hover:bg-blue-700
+            transition
+            shadow-sm
+          "
         >
+          <FiSave size={14} />
           Guardar
         </button>
 

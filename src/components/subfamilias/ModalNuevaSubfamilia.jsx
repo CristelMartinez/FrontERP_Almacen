@@ -10,9 +10,7 @@ import toast from "react-hot-toast"
 import api from "../../api/api"
 
 import Modal from "../Modal"
-
 import InputField from "../InputField"
-
 import SelectField from "../SelectField"
 
 export default function ModalNuevaSubfamilia({
@@ -107,40 +105,29 @@ export default function ModalNuevaSubfamilia({
     <Modal ancho="max-w-xl">
 
       {/* HEADER */}
-      <div className="
-        bg-blue-600
-        text-white
+      <div className="flex items-center justify-between mb-6">
 
-        text-lg
-        font-semibold
+        <div>
+          <h2 className="text-base font-semibold text-gray-800">
+            Nueva subfamilia
+          </h2>
 
-        p-4
-        rounded
-        mb-6
+          <p className="text-xs text-gray-400 mt-0.5">
+            Registrar nueva subfamilia
+          </p>
+        </div>
 
-        flex
-        justify-between
-      ">
-
-        <span>
-          Nueva Subfamilia
-        </span>
-
-        <span className="
-          text-sm
-          opacity-90
-        ">
-          Registrar nueva subfamilia
-        </span>
+        <button
+          onClick={cerrar}
+          className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition"
+        >
+          <FiX size={16} />
+        </button>
 
       </div>
 
       {/* FORM */}
-      <div className="
-        grid
-        grid-cols-1
-        gap-6
-      ">
+      <div className="space-y-4">
 
         <SelectField
           label="Familia"
@@ -149,8 +136,7 @@ export default function ModalNuevaSubfamilia({
           onChange={handleChange}
           options={familias.map(f => ({
             id: f.id_familia,
-            nombre:
-              `${f.codigo} - ${f.nombre}`
+            nombre: `${f.codigo} - ${f.nombre}`
           }))}
         />
 
@@ -172,55 +158,45 @@ export default function ModalNuevaSubfamilia({
 
       </div>
 
-      {/* BOTONES */}
-      <div className="
-        flex
-        justify-between
-        mt-8
-      ">
+      {/* FOOTER */}
+      <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-6 pt-5 border-t border-gray-100">
 
         <button
           onClick={cerrar}
           className="
-            flex
-            items-center
-            gap-2
-
-            bg-gray-200
-
-            px-6
-            py-2
-
+            w-full sm:w-auto
+            flex items-center justify-center gap-2
+            px-4 py-2
+            text-sm
+            text-gray-600
+            bg-white
+            border border-gray-200
             rounded-lg
-            shadow
-
-            hover:bg-gray-300
+            hover:bg-gray-50
+            transition
           "
         >
-          <FiX />
+          <FiX size={14} />
           Cancelar
         </button>
 
         <button
           onClick={handleGuardar}
           className="
-            flex
-            items-center
-            gap-2
-
+            w-full sm:w-auto
+            flex items-center justify-center gap-2
+            px-4 py-2
+            text-sm
+            font-medium
             bg-blue-600
             text-white
-
-            px-6
-            py-2
-
             rounded-lg
-            shadow
-
             hover:bg-blue-700
+            transition
+            shadow-sm
           "
         >
-          <FiSave />
+          <FiSave size={14} />
           Guardar
         </button>
 

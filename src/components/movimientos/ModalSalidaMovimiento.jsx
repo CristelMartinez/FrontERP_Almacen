@@ -7,7 +7,7 @@ import SelectField from "../SelectField"
 
 function SectionDivider({ label }) {
   return (
-    <div className="col-span-2 pt-2 pb-1 border-b border-gray-100">
+    <div className="sm:col-span-2 pt-2 pb-1 border-b border-gray-100">
       <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">
         {label}
       </p>

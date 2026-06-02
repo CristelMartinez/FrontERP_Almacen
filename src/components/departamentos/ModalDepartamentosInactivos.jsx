@@ -1,3 +1,8 @@
+import {
+  FiRotateCcw,
+  FiX
+} from "react-icons/fi"
+
 import Modal from "../Modal"
 
 export default function ModalDepartamentosInactivos({
@@ -8,33 +13,102 @@ export default function ModalDepartamentosInactivos({
 
   return (
 
-    <Modal>
+    <Modal ancho="max-w-2xl">
 
-      <h2 className="text-xl font-semibold text-center mb-6">
-        Departamentos Inactivos
-      </h2>
+      {/* HEADER */}
+      <div className="flex items-center justify-between mb-6">
 
-      <div className="space-y-3 max-h-[300px] overflow-y-auto">
+        <div>
+
+          <h2 className="text-base font-semibold text-gray-800">
+            Departamentos inactivos
+          </h2>
+
+          <p className="text-xs text-gray-400 mt-0.5">
+            Reactivar departamentos disponibles
+          </p>
+
+        </div>
+
+        <button
+          onClick={cerrar}
+          className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition"
+        >
+          <FiX size={16} />
+        </button>
+
+      </div>
+
+      {/* LISTADO */}
+      <div className="space-y-4 max-h-[400px] overflow-y-auto">
 
         {departamentos.length === 0 && (
-          <p className="text-center text-gray-400">
+
+          <div className="text-center text-gray-500 py-6">
             No hay departamentos inactivos
-          </p>
+          </div>
+
         )}
 
-        {departamentos.map((d) => (
+        {departamentos.map((departamento) => (
 
           <div
-            key={d.id_departamento}
-            className="flex justify-between items-center border p-3 rounded"
+            key={departamento.id_departamento}
+            className="
+              flex
+              flex-col
+              sm:flex-row
+
+              gap-4
+              sm:gap-0
+
+              sm:justify-between
+              sm:items-center
+
+              border
+              border-gray-200
+
+              rounded-lg
+
+              p-4
+            "
           >
 
-            <span>{d.nombre}</span>
+            <div>
+
+              <div className="font-semibold break-words">
+                {departamento.nombre}
+              </div>
+
+            </div>
 
             <button
-              onClick={() => reactivar(d.id_departamento)}
-              className="text-green-600 hover:text-green-800"
+              onClick={() =>
+                reactivar(
+                  departamento.id_departamento
+                )
+              }
+              className="
+                w-full sm:w-auto
+
+                flex
+                items-center
+                justify-center
+                gap-2
+
+                bg-green-600
+                text-white
+
+                px-4
+                py-2
+
+                rounded-lg
+
+                hover:bg-green-700
+                transition
+              "
             >
+              <FiRotateCcw size={14} />
               Reactivar
             </button>
 
@@ -44,12 +118,37 @@ export default function ModalDepartamentosInactivos({
 
       </div>
 
-      <div className="flex justify-center mt-6">
+      {/* FOOTER */}
+      <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6 pt-5 border-t border-gray-100">
 
         <button
           onClick={cerrar}
-          className="px-6 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+          className="
+            w-full sm:w-auto
+
+            flex
+            items-center
+            justify-center
+            gap-2
+
+            px-4
+            py-2
+
+            text-sm
+
+            text-gray-600
+            bg-white
+
+            border
+            border-gray-200
+
+            rounded-lg
+
+            hover:bg-gray-50
+            transition
+          "
         >
+          <FiX size={14} />
           Cerrar
         </button>
 

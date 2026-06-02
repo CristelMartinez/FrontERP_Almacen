@@ -1,13 +1,22 @@
 import { useState, useEffect } from "react"
 import api from "../../api/api"
 import toast from "react-hot-toast"
-import { FiPlus, FiTrash, FiSave, FiX } from "react-icons/fi"
+import { FiPlus, FiTrash2, FiSave, FiX, FiSearch } from "react-icons/fi"
 import Modal from "../Modal"
 import InputField from "../InputField"
 import SelectField from "../SelectField"
 
-export default function ModalApartado({ cerrar, recargar }) {
+function SectionDivider({ label }) {
+  return (
+    <div className="sm:col-span-2 pt-2 pb-1 border-b border-gray-100">
+      <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">
+        {label}
+      </p>
+    </div>
+  )
+}
 
+export default function ModalApartado({ cerrar, recargar }) {
   const usuario = JSON.parse(localStorage.getItem("usuario"))
 
   const [almacenes, setAlmacenes] = useState([])
@@ -16,6 +25,7 @@ export default function ModalApartado({ cerrar, recargar }) {
 
   const [form, setForm] = useState({
     id_almacen: "",
+    id_departamento: "",
     responsable_solicita: "",
     observaciones: "",
     numero_pedido: "",
@@ -29,14 +39,12 @@ export default function ModalApartado({ cerrar, recargar }) {
     codigo_barras: "",
     sku: "",
     nombre: "",
-    cantidad: ""
+    cantidad: "",
   })
 
   const [detalles, setDetalles] = useState([])
 
-  useEffect(() => {
-    cargarCatalogos()
-  }, [])
+  useEffect(() => { cargarCatalogos() }, [])
 
   const cargarCatalogos = async () => {
     try {
@@ -44,39 +52,20 @@ export default function ModalApartado({ cerrar, recargar }) {
       setAlmacenes(res.data.almacenes)
       setDepartamentos(res.data.departamentos)
     } catch (error) {
-      console.error("Error cargando catalogos", error)
+      console.error("Error cargando catálogos", error)
     }
   }
 
   const handleChange = (e) => {
-
     const { name, value } = e.target
-
-    setForm({
-      ...form,
-      [name]: value
-    })
-
-    // 🔥 Si cambia el almacén → resetear stock
-    if (name === "id_almacen") {
-      setStockDisponible(null)
-    }
-
+    setForm({ ...form, [name]: value })
+    if (name === "id_almacen") setStockDisponible(null)
   }
 
-  const handleProducto = (e) => {
-    setProducto({
-      ...producto,
-      [e.target.name]: e.target.value
-    })
-  }
+  const handleProducto = (e) => setProducto({ ...producto, [e.target.name]: e.target.value })
 
   const buscarProducto = async (valor) => {
-    if (!valor) {
-      setResultadosBusqueda([])
-      return
-    }
-
+    if (!valor) { setResultadosBusqueda([]); return }
     try {
       const res = await api.get(`/productos/buscar?q=${valor}`)
       setResultadosBusqueda(res.data)
@@ -86,32 +75,23 @@ export default function ModalApartado({ cerrar, recargar }) {
   }
 
   const handleBusqueda = (e) => {
-    const valor = e.target.value
-    setBusqueda(valor)
-    buscarProducto(valor)
+    setBusqueda(e.target.value)
+    buscarProducto(e.target.value)
   }
 
   const seleccionarProducto = async (p) => {
-
     setProducto({
-      id_producto: p.id_producto,
+      id_producto:   p.id_producto,
       codigo_barras: p.codigo_barras || "",
-      sku: p.sku || "",
-      nombre: p.nombre,
-      cantidad: ""
+      sku:           p.sku || "",
+      nombre:        p.nombre,
+      cantidad:      "",
     })
 
     if (form.id_almacen) {
       try {
-
-        const res = await api.get(
-          `/inventario/stock/${p.id_producto}/${form.id_almacen}`
-        )
-
-        // 🔥 SOLO GUARDAS
-        const disponible = Number(res.data?.stock_disponible)
-        setStockDisponible(disponible)
-
+        const res = await api.get(`/inventario/stock/${p.id_producto}/${form.id_almacen}`)
+        setStockDisponible(Number(res.data?.stock_disponible))
       } catch (error) {
         console.error(error)
       }
@@ -122,301 +102,245 @@ export default function ModalApartado({ cerrar, recargar }) {
   }
 
   const agregarProducto = () => {
+    if (!form.id_almacen)                              return toast.error("Seleccione almacén primero")
+    if (!producto.id_producto)                         return toast.error("Seleccione un producto")
+    if (!producto.cantidad || isNaN(producto.cantidad)) return toast.error("Ingrese una cantidad válida")
+    if (Number(producto.cantidad) <= 0)                return toast.error("La cantidad debe ser mayor a 0")
+    if (stockDisponible === null)                      return toast.error("No se pudo validar el stock disponible")
+    if (Number(producto.cantidad) > stockDisponible)   return toast.error(`Stock insuficiente. Disponible: ${stockDisponible}`)
 
-    if (!form.id_almacen) {
-      toast.error("Seleccione almacén primero")
-      return
-    }
+    setDetalles([...detalles, {
+      id_producto:   Number(producto.id_producto),
+      codigo_barras: producto.codigo_barras,
+      sku:           producto.sku,
+      nombre:        producto.nombre,
+      cantidad:      Number(producto.cantidad),
+      id_almacen:    Number(form.id_almacen),
+    }])
 
-    if (!producto.id_producto) {
-      toast.error("Seleccione un producto")
-      return
-    }
-
-    if (!producto.cantidad || isNaN(producto.cantidad)) {
-      toast.error("Ingrese una cantidad válida")
-      return
-    }
-
-    if (Number(producto.cantidad) <= 0) {
-      toast.error("La cantidad debe ser mayor a 0")
-      return
-    }
-
-    if (stockDisponible === null) {
-      toast.error("No se pudo validar el stock disponible")
-      return
-    }
-
-    if (Number(producto.cantidad) > Number(stockDisponible)) {
-      toast.error(`Stock insuficiente. Disponible: ${stockDisponible}`)
-      return
-    }
-
-    setDetalles([
-      ...detalles,
-      {
-        id_producto: Number(producto.id_producto),
-        codigo_barras: producto.codigo_barras,
-        sku: producto.sku,
-        nombre: producto.nombre,
-        cantidad: Number(producto.cantidad),
-        id_almacen: Number(form.id_almacen)
-      }
-    ])
-
-    setProducto({
-      id_producto: "",
-      codigo_barras: "",
-      sku: "",
-      nombre: "",
-      cantidad: ""
-    })
-
+    setProducto({ id_producto: "", codigo_barras: "", sku: "", nombre: "", cantidad: "" })
     setBusqueda("")
+    setStockDisponible(null)
   }
 
-  const eliminarProducto = (index) => {
-    setDetalles(detalles.filter((_, i) => i !== index))
-  }
+  const eliminarProducto = (index) => setDetalles(detalles.filter((_, i) => i !== index))
 
   const crearApartado = async () => {
-
-    if (!form.id_almacen) {
-      toast.error("Seleccione un almacén")
-      return
-    }
-
-    if (!form.numero_pedido) {
-      toast.error("El número de pedido es obligatorio")
-      return
-    }
-
-    if (detalles.length === 0) {
-      toast.error("Agregue al menos un producto")
-      return
-    }
+    if (!form.id_almacen)      return toast.error("Seleccione un almacén")
+    if (!form.numero_pedido)   return toast.error("El número de pedido es obligatorio")
+    if (detalles.length === 0) return toast.error("Agregue al menos un producto")
 
     try {
-
-      const payload = {
-        id_almacen: Number(form.id_almacen),
-        id_departamento: form.id_departamento
-          ? Number(form.id_departamento)
-          : null,
+      await api.post("/apartados", {
+        id_almacen:           Number(form.id_almacen),
+        id_departamento:      form.id_departamento ? Number(form.id_departamento) : null,
         responsable_solicita: form.responsable_solicita,
-        observaciones: form.observaciones,
-        numero_pedido: form.numero_pedido,
-        detalles
-      }
-
-      await api.post("/apartados", payload)
-
+        observaciones:        form.observaciones,
+        numero_pedido:        form.numero_pedido,
+        detalles,
+      })
       toast.success("Apartado creado correctamente")
-
       recargar()
       cerrar()
-
     } catch (error) {
-
-      const mensaje =
-        error.response?.data?.message ||
-        "Error creando apartado"
-
-      toast.error(mensaje)
+      toast.error(error.response?.data?.message || "Error creando apartado")
     }
-
   }
 
   return (
-
     <Modal ancho="max-w-4xl">
 
-      <div className="max-h-[85vh] overflow-y-auto pr-2">
-
-        <div className="bg-yellow-600 text-white px-6 py-3 rounded-lg mb-6 flex justify-between">
-          <h2 className="text-lg font-semibold">Nuevo Apartado</h2>
-          <span className="text-sm opacity-90">
-            Reserva de productos (no afecta inventario)
-          </span>
+      {/* HEADER */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h2 className="text-base font-semibold text-gray-800">Nuevo apartado</h2>
+          <p className="text-xs text-gray-400 mt-0.5">Reserva de productos (no afecta inventario)</p>
         </div>
+        <button
+          onClick={cerrar}
+          className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition"
+        >
+          <FiX size={16} />
+        </button>
+      </div>
 
-        <div className="grid grid-cols-2 gap-6">
+      {/* FORM */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
 
-          <InputField
-            label="Usuario"
-            value={usuario?.nombre || ""}
-            disabled
-          />
+        <SectionDivider label="Información general" />
 
-          <InputField
-            label="Quién solicita"
-            name="responsable_solicita"
-            value={form.responsable_solicita}
-            onChange={handleChange}
-          />
+        <InputField label="Usuario" value={usuario?.nombre || ""} disabled />
 
-          <SelectField
-            label="Departamento"
-            name="id_departamento"
-            value={form.id_departamento}
-            onChange={handleChange}
-            options={departamentos.map(d => ({
-              id: d.id_departamento,
-              nombre: d.nombre
-            }))}
-          />
+        <InputField
+          label="Quién solicita"
+          name="responsable_solicita"
+          value={form.responsable_solicita}
+          onChange={handleChange}
+        />
 
-          <SelectField
-            label="Almacén"
-            name="id_almacen"
-            value={form.id_almacen}
-            onChange={handleChange}
-            options={almacenes.map(a => ({
-              id: a.id_almacen,
-              nombre: a.nombre
-            }))}
-          />
-          <InputField
-            label="Número de pedido"
-            name="numero_pedido"
-            value={form.numero_pedido}
-            onChange={handleChange}
-          />
+        <SelectField
+          label="Departamento"
+          name="id_departamento"
+          value={form.id_departamento}
+          onChange={handleChange}
+          options={departamentos.map((d) => ({ id: d.id_departamento, nombre: d.nombre }))}
+        />
 
-        </div>
+        <SelectField
+          label="Almacén"
+          name="id_almacen"
+          value={form.id_almacen}
+          onChange={handleChange}
+          options={almacenes.map((a) => ({ id: a.id_almacen, nombre: a.nombre }))}
+        />
 
-        {/* BUSCAR PRODUCTO */}
+        <InputField
+          label="Número de pedido"
+          name="numero_pedido"
+          value={form.numero_pedido}
+          onChange={handleChange}
+          placeholder="Obligatorio"
+        />
 
-        <div className="mt-6">
+        {/* BÚSQUEDA */}
+        <div className="col-span-1 sm:col-span-2 space-y-1.5 relative">
+          <SectionDivider label="Agregar producto" />
 
-          <label className="text-sm">
-            Buscar producto (Código / SKU / Nombre)
+          <label className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+            Buscar producto (código / SKU / nombre)
           </label>
-
-          <input
-            value={busqueda}
-            onChange={handleBusqueda}
-            placeholder="Escanear código o escribir"
-            className="w-full border rounded-lg px-3 py-2"
-          />
+          <div className="relative">
+            <FiSearch size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none" />
+            <input
+              value={busqueda}
+              onChange={handleBusqueda}
+              placeholder="Escanear código o escribir…"
+              className="w-full pl-9 pr-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-700 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition"
+            />
+          </div>
 
           {resultadosBusqueda.length > 0 && (
-            <div className="border rounded-lg mt-1 max-h-40 overflow-y-auto bg-white">
-              {resultadosBusqueda.map(p => (
+            <div className="absolute z-20 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-44 overflow-y-auto">
+              {resultadosBusqueda.map((p) => (
                 <div
                   key={p.id_producto}
                   onClick={() => seleccionarProducto(p)}
-                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                  className="px-4 py-2.5 hover:bg-blue-50 cursor-pointer text-sm text-gray-700 border-b border-gray-50 last:border-0 transition"
                 >
-                  {p.nombre} — {p.sku}
+                  <span className="font-medium">{p.nombre}</span>
+                  {p.sku && <span className="text-gray-400 text-xs ml-2">{p.sku}</span>}
                 </div>
               ))}
             </div>
           )}
-
         </div>
 
-        {/* PRODUCTO */}
+        {/* DATOS PRODUCTO */}
+        <InputField label="Código de barras" value={producto.codigo_barras} disabled />
 
-        <div className="grid grid-cols-4 gap-4 mt-6">
+        <InputField label="SKU" value={producto.sku} disabled />
 
-          <InputField label="Código barras" value={producto.codigo_barras} disabled />
-          <InputField label="SKU" value={producto.sku} disabled />
+        <div className="col-span-1 sm:col-span-2">
           <InputField label="Producto" value={producto.nombre} disabled />
+        </div>
 
-          <InputField
-            label="Cantidad"
+        {/* CANTIDAD + BADGE STOCK */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+            Cantidad
+          </label>
+          <input
             name="cantidad"
             type="number"
             min="1"
             value={producto.cantidad}
             onChange={handleProducto}
+            placeholder="0"
+            className="w-full px-3 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition"
           />
-          {/* {stockDisponible !== null && !isNaN(stockDisponible) && (
-            <span className="text-sm text-blue-600">
-              Disponible: {stockDisponible}
-            </span>
-          )}*/}
-          <div className="flex items-end">
-            <button
-              onClick={agregarProducto}
-              className="bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-2"
-            >
-              <FiPlus />
-              Agregar
-            </button>
-          </div>
-
+          {stockDisponible !== null && !isNaN(stockDisponible) && (
+            <p className="text-xs text-blue-600 font-medium">
+              Disponible en almacén: {stockDisponible}
+            </p>
+          )}
         </div>
 
-        {/* TABLA */}
+        <div className="flex items-end pb-0.5">
+          <button
+            onClick={agregarProducto}
+            className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          >
+            <FiPlus size={14} />
+            Agregar producto
+          </button>
+        </div>
 
-        {detalles.length > 0 && (
-          <table className="w-full mt-6 text-sm">
+      </div>
+
+      {/* TABLA DETALLES */}
+      {detalles.length > 0 && (
+        <div className="mt-6 border border-gray-100 rounded-xl overflow-x-auto">
+          <table className="w-full text-sm min-w-[460px]">
             <thead>
-              <tr className="border-b text-gray-600">
-                <th className="text-left py-2">Código</th>
-                <th className="text-left">SKU</th>
-                <th className="text-left">Producto</th>
-                <th className="text-center">Cantidad</th>
-                <th className="text-center w-12"></th>
+              <tr className="border-b border-gray-100 bg-gray-50">
+                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-gray-400">Código</th>
+                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-gray-400">SKU</th>
+                <th className="text-left px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-gray-400">Producto</th>
+                <th className="text-center px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-gray-400">Cant.</th>
+                <th className="w-10" />
               </tr>
             </thead>
             <tbody>
               {detalles.map((d, i) => (
-                <tr key={i} className="border-b hover:bg-gray-50">
-                  <td>{d.codigo_barras}</td>
-                  <td>{d.sku}</td>
-                  <td>{d.nombre}</td>
-                  <td className="text-center">{d.cantidad}</td>
-                  <td className="text-center">
+                <tr key={i} className="border-b border-gray-50 last:border-0 hover:bg-gray-50 transition">
+                  <td className="px-4 py-2.5 text-xs font-mono text-gray-500">{d.codigo_barras || "—"}</td>
+                  <td className="px-4 py-2.5 text-xs text-gray-500">{d.sku}</td>
+                  <td className="px-4 py-2.5 text-gray-800 font-medium">{d.nombre}</td>
+                  <td className="px-4 py-2.5 text-center text-gray-700">{d.cantidad}</td>
+                  <td className="px-4 py-2.5 text-center">
                     <button
                       onClick={() => eliminarProducto(i)}
-                      className="text-red-500 hover:text-red-700"
+                      className="p-1 rounded-md text-gray-300 hover:text-red-500 hover:bg-red-50 transition"
                     >
-                      <FiTrash />
+                      <FiTrash2 size={14} />
                     </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        )}
-
-        <div className="mt-6">
-          <InputField
-            label="Observaciones"
-            name="observaciones"
-            value={form.observaciones}
-            onChange={handleChange}
-          />
         </div>
+      )}
 
-        <div className="flex justify-between mt-8">
+      {/* OBSERVACIONES */}
+      <div className="mt-5">
+        <InputField
+          label="Observaciones"
+          name="observaciones"
+          value={form.observaciones}
+          onChange={handleChange}
+          placeholder="Notas adicionales (opcional)"
+        />
+      </div>
 
-          <button
-            onClick={cerrar}
-            className="bg-gray-200 px-6 py-2 rounded-lg flex items-center gap-2"
-          >
-            <FiX />
-            Cancelar
-          </button>
-
-          <button
-            onClick={crearApartado}
-            className="bg-yellow-600 text-white px-6 py-2 rounded-lg flex items-center gap-2"
-          >
-            <FiSave />
-            Crear apartado
-          </button>
-
-        </div>
-
+      {/* BOTONES */}
+      <div className="flex justify-end gap-3 mt-6 pt-5 border-t border-gray-100">
+        <button
+          onClick={cerrar}
+          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+        >
+          <FiX size={14} />
+          Cancelar
+        </button>
+        <button
+          onClick={crearApartado}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm"
+        >
+          <FiSave size={14} />
+          Crear apartado
+        </button>
       </div>
 
     </Modal>
-
   )
-
 }

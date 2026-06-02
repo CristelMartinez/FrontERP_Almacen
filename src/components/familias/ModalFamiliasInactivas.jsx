@@ -16,44 +16,35 @@ export default function ModalFamiliasInactivas({
     <Modal ancho="max-w-2xl">
 
       {/* HEADER */}
-      <div className="
-        bg-gray-700
-        text-white
+      <div className="flex items-center justify-between mb-6">
 
-        text-lg
-        font-semibold
+        <div>
 
-        p-4
-        rounded
-        mb-6
+          <h2 className="text-base font-semibold text-gray-800">
+            Familias inactivas
+          </h2>
 
-        flex
-        justify-between
-      ">
+          <p className="text-xs text-gray-400 mt-0.5">
+            Reactivar familias disponibles
+          </p>
 
-        <span>
-          Familias Inactivas
-        </span>
+        </div>
 
-        <span className="
-          text-sm
-          opacity-90
-        ">
-          Reactivar familias
-        </span>
+        <button
+          onClick={cerrar}
+          className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition"
+        >
+          <FiX size={16} />
+        </button>
 
       </div>
 
-      {/* TABLA */}
-      <div className="space-y-4">
+      {/* LISTADO */}
+      <div className="space-y-4 max-h-[400px] overflow-y-auto">
 
         {familias.length === 0 && (
 
-          <div className="
-            text-center
-            text-gray-500
-            py-6
-          ">
+          <div className="text-center text-gray-500 py-6">
             No hay familias inactivas
           </div>
 
@@ -65,10 +56,18 @@ export default function ModalFamiliasInactivas({
             key={familia.id_familia}
             className="
               flex
-              justify-between
-              items-center
+              flex-col
+              sm:flex-row
+
+              gap-4
+              sm:gap-0
+
+              sm:justify-between
+              sm:items-center
 
               border
+              border-gray-200
+
               rounded-lg
 
               p-4
@@ -77,16 +76,11 @@ export default function ModalFamiliasInactivas({
 
             <div>
 
-              <div className="
-                font-semibold
-              ">
+              <div className="font-semibold break-words">
                 {familia.nombre}
               </div>
 
-              <div className="
-                text-sm
-                text-gray-500
-              ">
+              <div className="text-sm text-gray-500">
                 Código: {familia.codigo}
               </div>
 
@@ -99,8 +93,11 @@ export default function ModalFamiliasInactivas({
                 )
               }
               className="
+                w-full sm:w-auto
+
                 flex
                 items-center
+                justify-center
                 gap-2
 
                 bg-green-600
@@ -112,9 +109,10 @@ export default function ModalFamiliasInactivas({
                 rounded-lg
 
                 hover:bg-green-700
+                transition
               "
             >
-              <FiRotateCcw />
+              <FiRotateCcw size={14} />
               Reactivar
             </button>
 
@@ -125,30 +123,36 @@ export default function ModalFamiliasInactivas({
       </div>
 
       {/* FOOTER */}
-      <div className="
-        flex
-        justify-end
-        mt-8
-      ">
+      <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6 pt-5 border-t border-gray-100">
 
         <button
           onClick={cerrar}
           className="
+            w-full sm:w-auto
+
             flex
             items-center
+            justify-center
             gap-2
 
-            bg-gray-200
-
-            px-6
+            px-4
             py-2
+
+            text-sm
+
+            text-gray-600
+            bg-white
+
+            border
+            border-gray-200
 
             rounded-lg
 
-            hover:bg-gray-300
+            hover:bg-gray-50
+            transition
           "
         >
-          <FiX />
+          <FiX size={14} />
           Cerrar
         </button>
 

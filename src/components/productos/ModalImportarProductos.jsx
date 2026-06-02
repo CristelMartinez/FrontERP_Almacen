@@ -57,46 +57,91 @@ const handleSubmit = async () => {
 }
 
   return (
-    <Modal>
+  <Modal ancho="max-w-md">
 
-      <h2 className="text-lg font-semibold mb-4">
-        Importar productos
-      </h2>
+    {/* HEADER */}
+    <div className="flex items-center justify-between mb-6">
+      <div>
+        <h2 className="text-base font-semibold text-gray-800">
+          Importar productos
+        </h2>
+        <p className="text-xs text-gray-400 mt-0.5">
+          Selecciona un archivo Excel para importar productos
+        </p>
+      </div>
+    </div>
 
-      {/* Input archivo */}
+    {/* INPUT */}
+    <div className="space-y-4">
+
       <input
         type="file"
-        accept=".xlsx, .xls"
+        accept=".xlsx,.xls"
         onChange={handleSeleccion}
-        className="mb-4"
+        className="
+          w-full
+          text-sm
+          file:mr-4
+          file:px-4
+          file:py-2
+          file:rounded-lg
+          file:border-0
+          file:bg-blue-50
+          file:text-blue-700
+          file:font-medium
+          hover:file:bg-blue-100
+        "
       />
 
-      {/* Nombre archivo */}
       {archivo && (
-        <p className="text-sm text-green-600 mb-4">
-          Archivo: {archivo.name}
-        </p>
+        <div className="rounded-lg border border-green-100 bg-green-50 px-3 py-2">
+          <p className="text-sm text-green-700 break-all">
+            {archivo.name}
+          </p>
+        </div>
       )}
 
-      {/* Botones */}
-      <div className="flex justify-between">
+    </div>
 
-        <button
-          onClick={cerrar}
-          className="bg-gray-300 px-4 py-2 rounded-lg"
-        >
-          Cancelar
-        </button>
+    {/* FOOTER */}
+    <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-6 pt-5 border-t border-gray-100">
 
-        <button
-          onClick={handleSubmit}
-          className="bg-green-600 text-white px-4 py-2 rounded-lg"
-        >
-          Importar
-        </button>
+      <button
+        onClick={cerrar}
+        className="
+          w-full sm:w-auto
+          px-4 py-2
+          text-sm
+          text-gray-600
+          bg-white
+          border border-gray-200
+          rounded-lg
+          hover:bg-gray-50
+          transition
+        "
+      >
+        Cancelar
+      </button>
 
-      </div>
+      <button
+        onClick={handleSubmit}
+        className="
+          w-full sm:w-auto
+          px-4 py-2
+          text-sm
+          font-medium
+          bg-green-600
+          text-white
+          rounded-lg
+          hover:bg-green-700
+          transition
+        "
+      >
+        Importar
+      </button>
 
-    </Modal>
-  )
+    </div>
+
+  </Modal>
+)
 }

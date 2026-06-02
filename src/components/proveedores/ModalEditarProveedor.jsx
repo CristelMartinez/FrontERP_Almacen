@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react"
+import { FiSave, FiX } from "react-icons/fi"
+
 import Modal from "../Modal"
+import InputField from "../InputField"
 
 export default function ModalEditarProveedor({
   proveedor,
@@ -27,7 +30,6 @@ export default function ModalEditarProveedor({
 
   }, [proveedor])
 
-
   const handleChange = (e) => {
 
     setFormData({
@@ -37,97 +39,103 @@ export default function ModalEditarProveedor({
 
   }
 
-
   const handleGuardar = () => {
     guardar(formData)
   }
 
-
   return (
 
-    <Modal>
+    <Modal ancho="max-w-xl">
 
-      {/* Titulo */}
-      <div className="text-center text-xl font-semibold mb-6">
+      {/* HEADER */}
+      <div className="flex items-center justify-between mb-6">
 
-        Editar Proveedor
-
-      </div>
-
-
-      {/* Formulario */}
-      <div className="space-y-4 mb-8">
-
-        {/* Nombre (bloqueado) */}
         <div>
+          <h2 className="text-base font-semibold text-gray-800">
+            Editar proveedor
+          </h2>
 
-          <label className="block text-sm text-gray-600 mb-1">
-            Nombre
-          </label>
-
-          <input
-            type="text"
-            value={formData.nombre}
-            disabled
-            className="w-full border rounded-lg px-3 py-2 bg-gray-100"
-          />
-
+          <p className="text-xs text-gray-400 mt-0.5">
+            Modificar información del proveedor
+          </p>
         </div>
-
-
-        {/* Telefono */}
-        <div>
-
-          <label className="block text-sm text-gray-600 mb-1">
-            Teléfono
-          </label>
-
-          <input
-            type="text"
-            name="numero_contacto"
-            value={formData.numero_contacto}
-            onChange={handleChange}
-            className="w-full border rounded-lg px-3 py-2"
-          />
-
-        </div>
-
-
-        {/* Direccion */}
-        <div>
-
-          <label className="block text-sm text-gray-600 mb-1">
-            Dirección
-          </label>
-
-          <input
-            type="text"
-            name="direccion"
-            value={formData.direccion}
-            onChange={handleChange}
-            className="w-full border rounded-lg px-3 py-2"
-          />
-
-        </div>
-
-      </div>
-
-
-      {/* Botones */}
-      <div className="flex justify-center gap-6">
 
         <button
           onClick={cerrar}
-          className="px-6 py-2 bg-gray-200 rounded-lg shadow hover:bg-gray-300"
+          className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition"
         >
+          <FiX size={16} />
+        </button>
+
+      </div>
+
+      {/* FORM */}
+      <div className="space-y-4">
+
+        <InputField
+          label="Nombre"
+          value={formData.nombre}
+          disabled
+        />
+
+        <InputField
+          label="Teléfono"
+          name="numero_contacto"
+          value={formData.numero_contacto}
+          onChange={handleChange}
+          placeholder="Número de contacto"
+        />
+
+        <InputField
+          label="Dirección"
+          name="direccion"
+          value={formData.direccion}
+          onChange={handleChange}
+          placeholder="Dirección"
+        />
+
+      </div>
+
+      {/* FOOTER */}
+      <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-6 pt-5 border-t border-gray-100">
+
+        <button
+          onClick={cerrar}
+          className="
+            w-full sm:w-auto
+            flex items-center justify-center gap-2
+            px-4 py-2
+            text-sm
+            text-gray-600
+            bg-white
+            border border-gray-200
+            rounded-lg
+            hover:bg-gray-50
+            transition
+          "
+        >
+          <FiX size={14} />
           Cancelar
         </button>
 
         <button
           onClick={handleGuardar}
-          className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"
+          className="
+            w-full sm:w-auto
+            flex items-center justify-center gap-2
+            px-4 py-2
+            text-sm
+            font-medium
+            bg-blue-600
+            text-white
+            rounded-lg
+            hover:bg-blue-700
+            transition
+            shadow-sm
+          "
         >
-          Guardar
+          <FiSave size={14} />
+          Guardar cambios
         </button>
 
       </div>

@@ -143,106 +143,140 @@ export default function ModalUsuario({ cerrar, recargar, usuario }) {
 
   return (
 
-    <Modal ancho="max-w-2xl">
+  <Modal ancho="max-w-2xl">
 
-      {/* HEADER */}
-      <div className="bg-blue-500 text-white text-lg font-semibold p-4 rounded mb-6 flex justify-between">
+    {/* HEADER */}
+    <div className="flex items-center justify-between mb-6">
 
-        <span>
-          {usuario ? "Editar Usuario" : "Nuevo Usuario"}
-        </span>
+      <div>
 
-        <span className="text-sm opacity-90">
+        <h2 className="text-base font-semibold text-gray-800">
+          {usuario
+            ? "Editar usuario"
+            : "Nuevo usuario"}
+        </h2>
+
+        <p className="text-xs text-gray-400 mt-0.5">
 
           {usuario
             ? "Modificar información del usuario"
             : "Registrar nuevo usuario"}
 
-        </span>
+        </p>
 
       </div>
 
+      <button
+        onClick={cerrar}
+        className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition"
+      >
+        <FiX size={16} />
+      </button>
 
-      {/* FORM */}
-      <div className="grid grid-cols-2 gap-6">
+    </div>
+
+    {/* FORM */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      <InputField
+        label="Nombre"
+        name="nombre"
+        value={form.nombre}
+        onChange={handleChange}
+        placeholder="Nombre del usuario"
+      />
+
+      <InputField
+        label="Correo"
+        name="correo"
+        value={form.correo}
+        onChange={handleChange}
+        placeholder="Correo del usuario"
+      />
+
+      {!usuario && (
 
         <InputField
-          label="Nombre"
-          name="nombre"
-          value={form.nombre}
+          label="Contraseña"
+          name="password"
+          type="password"
+          value={form.password}
           onChange={handleChange}
-          placeholder="Nombre del usuario"
+          placeholder="Contraseña"
         />
 
-        <InputField
-          label="Correo"
-          name="correo"
-          value={form.correo}
-          onChange={handleChange}
-          placeholder="Correo del usuario"
-        />
+      )}
 
-        {!usuario && (
+      <SelectField
+        label="Rol"
+        name="id_rol"
+        value={form.id_rol}
+        onChange={handleChange}
+        options={roles.map(r => ({
+          id: r.id_rol,
+          nombre: r.nombre
+        }))}
+      />
 
-          <InputField
-            label="Contraseña"
-            name="password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-            placeholder="Contraseña"
-          />
+      <SelectField
+        label="Departamento"
+        name="id_departamento"
+        value={form.id_departamento}
+        onChange={handleChange}
+        options={departamentos.map(d => ({
+          id: d.id_departamento,
+          nombre: d.nombre
+        }))}
+      />
 
-        )}
+    </div>
 
-        <SelectField
-          label="Rol"
-          name="id_rol"
-          value={form.id_rol}
-          onChange={handleChange}
-          options={roles.map(r => ({
-            id: r.id_rol,
-            nombre: r.nombre
-          }))}
-        />
+    {/* FOOTER */}
+    <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-6 pt-5 border-t border-gray-100">
 
-        <SelectField
-          label="Departamento"
-          name="id_departamento"
-          value={form.id_departamento}
-          onChange={handleChange}
-          options={departamentos.map(d => ({
-            id: d.id_departamento,
-            nombre: d.nombre
-          }))}
-        />
+      <button
+        onClick={cerrar}
+        className="
+          w-full sm:w-auto
+          flex items-center justify-center gap-2
+          px-4 py-2
+          text-sm
+          text-gray-600
+          bg-white
+          border border-gray-200
+          rounded-lg
+          hover:bg-gray-50
+          transition
+        "
+      >
+        <FiX size={14} />
+        Cancelar
+      </button>
 
-      </div>
+      <button
+        onClick={guardarUsuario}
+        className="
+          w-full sm:w-auto
+          flex items-center justify-center gap-2
+          px-4 py-2
+          text-sm
+          font-medium
+          bg-blue-600
+          text-white
+          rounded-lg
+          hover:bg-blue-700
+          transition
+          shadow-sm
+        "
+      >
+        <FiSave size={14} />
+        {usuario ? "Actualizar" : "Guardar"}
+      </button>
 
+    </div>
 
-      {/* BOTONES */}
-      <div className="flex justify-between mt-8">
+  </Modal>
 
-        <button
-          onClick={cerrar}
-          className="flex items-center gap-2 bg-gray-200 px-6 py-2 rounded-lg shadow hover:bg-gray-300"
-        >
-          <FiX />
-          Cancelar
-        </button>
-
-        <button
-          onClick={guardarUsuario}
-          className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700"
-        >
-          <FiSave />
-          {usuario ? "Actualizar" : "Guardar"}
-        </button>
-
-      </div>
-
-    </Modal>
-
-  )
+)
 
 }

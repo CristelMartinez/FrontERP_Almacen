@@ -10,7 +10,7 @@ import SelectField from "../SelectField"
 /* ─── SEPARADOR DE SECCIÓN ──────────────────────────── */
 function SectionDivider({ label }) {
   return (
-    <div className="col-span-2 pt-2 pb-1 border-b border-gray-100">
+    <div className="col-span-1 sm:col-span-2 pt-2 pb-1 border-b border-gray-100">
       <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">
         {label}
       </p>
@@ -129,8 +129,8 @@ export default function ModalEditarProducto({ cerrar, recargar, producto }) {
       </div>
 
       {/* FORM con scroll */}
-      <div className="overflow-y-auto max-h-[60vh] pr-1">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+      <div className="overflow-y-auto max-h-[70vh] sm:max-h-[60vh] pr-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
 
           {/* ── IDENTIFICACIÓN (solo lectura) ── */}
           <SectionDivider label="Identificación" />
@@ -243,7 +243,7 @@ export default function ModalEditarProducto({ cerrar, recargar, producto }) {
             type="number"
           />
 
-          <div className="col-span-2">
+          <div className="sm:col-span-2">
             <InputField
               label="Descripción"
               name="descripcion"
@@ -257,17 +257,17 @@ export default function ModalEditarProducto({ cerrar, recargar, producto }) {
       </div>
 
       {/* BOTONES */}
-      <div className="flex justify-end gap-3 mt-6 pt-5 border-t border-gray-100">
+      <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-6 pt-5 border-t border-gray-100">
         <button
           onClick={cerrar}
-          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition"
         >
           <FiX size={14} />
           Cancelar
         </button>
         <button
           onClick={actualizarProducto}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm"
         >
           <FiSave size={14} />
           Actualizar producto
