@@ -63,7 +63,9 @@ export default function ModalImportarUbicaciones({
         <p className="text-xs text-gray-400 mt-1">
           Selecciona un archivo Excel para importar ubicaciones
         </p>
-
+        <p className="text-xs text-gray-400 mt-1">
+          Modulo en desarrollo, si tienes dudas contacta al desarrollador
+        </p>
       </div>
 
       {/* ARCHIVO */}
