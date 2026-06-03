@@ -67,27 +67,28 @@ export default function Inventario() {
     const q = busqueda.toLowerCase()
     return (
       item.producto?.toLowerCase().includes(q) ||
-      item.codigo_barras?.toLowerCase().includes(q) ||
+      item.sku?.toLowerCase().includes(q) ||
       item.categoria?.toLowerCase().includes(q)
     )
   })
 
   const columns = [
+    
     {
-      key: "producto",
-      label: "Producto",
-    },
-    {
-      key: "codigo_barras",
-      label: "Cód. barras",
+      key: "sku",
+      label: "SKU",
       render: (row) =>
-        row.codigo_barras ? (
+        row.sku ? (
           <span className="font-mono text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
-            {row.codigo_barras}
+            {row.sku}
           </span>
         ) : (
           <span className="text-gray-300">—</span>
         ),
+    },
+    {
+      key: "producto",
+      label: "Producto",
     },
     {
       key: "categoria",

@@ -84,7 +84,8 @@ export default function ModalProducto({ cerrar, recargar }) {
 
   const guardarProducto = async () => {
     if (!form.nombre.trim())       return toast.error("El nombre del producto es obligatorio")
-    if (!form.codigo_barras.trim()) return toast.error("El código de barras es obligatorio")
+    /*Por peticion del personal de almacen el codigo de barras no es obligatorio, se genera un SKU automatico con familia-subfamilia-automatico  
+    if (!form.codigo_barras.trim()) return toast.error("El código de barras es obligatorio")*/
     if (!form.id_unidad)           return toast.error("Debe seleccionar una unidad")
     if (!form.id_categoria)        return toast.error("Debe seleccionar una categoría")
     if (!form.id_proveedor)        return toast.error("Debe seleccionar un proveedor")
