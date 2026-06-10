@@ -146,7 +146,7 @@ export default function Apartados() {
     },
     {
       key: "total_productos",
-      label: "Productos",
+      label: "Cantidad",
       render: (row) => (
         <span className="font-medium text-gray-700">{row.total_productos}</span>
       ),
