@@ -164,6 +164,24 @@ export default function Apartados() {
         </span>
       ),
     },
+        {
+      key: "fecha_modificacion",
+      label: "Fecha entrega",
+      render: (row) =>
+        row.estado === "convertido" && row.fecha_modificacion ? (
+          <span className="text-xs text-green-600 font-medium">
+            {new Date(row.fecha_modificacion).toLocaleDateString("es-MX", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })}
+          </span>
+        ) : row.estado === "cancelado" ? (
+          <span className="text-xs text-gray-300">Cancelado</span>
+        ) : (
+          <span className="text-xs text-amber-500 italic">Pendiente</span>
+        ),
+    },
     {
       key: "acciones",
       label: "Acciones",

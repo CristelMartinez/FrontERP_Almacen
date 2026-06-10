@@ -1,18 +1,23 @@
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
+import { FiEdit2, FiTrash2 } from "react-icons/fi"
 import api from "../../api/api"
 import CatalogoPage from "../../components/CatalogoPage"
 import EstadoBadge from "../../components/EstadoBadge"
 import ModalNuevaSubfamilia from "../../components/subfamilias/ModalNuevaSubfamilia"
+import ModalEditarSubfamilia from "../../components/subfamilias/ModalEditarSubfamilia"
+import ModalEliminarSubfamilia from "../../components/subfamilias/ModalEliminarSubfamilia"
 import ModalSubfamiliasInactivas from "../../components/subfamilias/ModalSubfamiliasInactivas"
 import ModalImportarSubfamilias from "../../components/subfamilias/ModalImportarSubfamilia"
 
 export default function Subfamilias() {
-  const [subfamilias, setSubfamilias] = useState([])
+  const [subfamilias, setSubfamilias]               = useState([])
   const [subfamiliasInactivas, setSubfamiliasInactivas] = useState([])
-  const [modalNueva, setModalNueva] = useState(false)
-  const [modalInactivos, setModalInactivos] = useState(false)
-  const [modalImportar, setModalImportar] = useState(false)
+  const [modalNueva, setModalNueva]                 = useState(false)
+  const [modalInactivos, setModalInactivos]         = useState(false)
+  const [modalImportar, setModalImportar]           = useState(false)
+  const [subfamiliaEditar, setSubfamiliaEditar]     = useState(null) // ← nueva
+  const [subfamiliaEliminar, setSubfamiliaEliminar] = useState(null) // ← nueva
 
   const cargarSubfamilias = async () => {
     try {
@@ -46,6 +51,30 @@ export default function Subfamilias() {
     }
   }
 
+  // ── Editar ──────────────────────────────────────────────
+  const guardarEdicion = async (data) => {
+    try {
+      await api.put(`/subfamilias/${subfamiliaEditar.id_subfamilia}`, data)
+      toast.success("Subfamilia actualizada")
+      setSubfamiliaEditar(null)
+      cargarSubfamilias()
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error editando subfamilia")
+    }
+  }
+
+  // ── Eliminar (borrado lógico) ────────────────────────────
+  const confirmarEliminar = async () => {
+    try {
+      await api.delete(`/subfamilias/${subfamiliaEliminar.id_subfamilia}`)
+      toast.success("Subfamilia eliminada")
+      setSubfamiliaEliminar(null)
+      cargarSubfamilias()
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error eliminando subfamilia")
+    }
+  }
+
   const reactivar = async (id) => {
     try {
       await api.put(`/subfamilias/reactivar/${id}`)
@@ -76,6 +105,28 @@ export default function Subfamilias() {
       label: "Estado",
       render: (row) => <EstadoBadge activo={row.activo} />,
     },
+    {
+      key: "acciones",
+      label: "Acciones",
+      render: (row) => (
+        <div className="flex gap-3">
+          <button
+            onClick={() => setSubfamiliaEditar(row)}
+            className="text-gray-400 hover:text-blue-600 transition-colors"
+            title="Editar"
+          >
+            <FiEdit2 size={16} />
+          </button>
+          <button
+            onClick={() => setSubfamiliaEliminar(row)}
+            className="text-gray-400 hover:text-red-500 transition-colors"
+            title="Eliminar"
+          >
+            <FiTrash2 size={16} />
+          </button>
+        </div>
+      ),
+    },
   ]
 
   return (
@@ -95,6 +146,23 @@ export default function Subfamilias() {
           guardar={guardarNueva}
         />
       )}
+
+      {subfamiliaEditar && (
+        <ModalEditarSubfamilia
+          subfamilia={subfamiliaEditar}
+          cerrar={() => setSubfamiliaEditar(null)}
+          guardar={guardarEdicion}
+        />
+      )}
+
+      {subfamiliaEliminar && (
+        <ModalEliminarSubfamilia
+          subfamilia={subfamiliaEliminar}
+          cerrar={() => setSubfamiliaEliminar(null)}
+          confirmar={confirmarEliminar}
+        />
+      )}
+
       {modalInactivos && (
         <ModalSubfamiliasInactivas
           subfamilias={subfamiliasInactivas}

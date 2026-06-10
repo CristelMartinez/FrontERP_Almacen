@@ -20,6 +20,22 @@ const columns = [
     ),
   },
   {
+    key: "fecha_conversion",
+    label: "Fecha entrega",
+    render: (row) =>
+      row.fecha_conversion ? (
+        <span className="text-xs text-green-600 font-medium">
+          {new Date(row.fecha_conversion).toLocaleDateString("es-MX", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          })}
+        </span>
+      ) : (
+        <span className="text-xs text-amber-500 italic">Pendiente</span>
+      ),
+  },
+  {
     key: "folio",
     label: "Folio",
     render: (row) => (
