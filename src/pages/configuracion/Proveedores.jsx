@@ -142,7 +142,10 @@ export default function Proveedores() {
         <ModalProveedoresInactivos proveedores={proveedoresInactivos} cerrar={() => setModalInactivos(false)} reactivar={reactivar} />
       )}
       {modalImportar && (
-        <ModalImportarProveedores cerrar={() => setModalImportar(false)} />
+        <ModalImportarProveedores
+          cargarProveedores={cargarProveedores}
+          cerrar={() => setModalImportar(false)}
+        />
       )}
     </CatalogoPage>
   )

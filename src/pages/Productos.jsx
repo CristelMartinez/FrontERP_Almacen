@@ -347,9 +347,10 @@ export default function Productos() {
         />
       )}
 
-      {mostrarImportar && (
+      {modalImportar && (
         <ModalImportarProductos
-          cerrar={() => setMostrarImportar(false)}
+          cargarProductos={cargarProductos}
+          cerrar={() => setModalImportar(false)}
         />
       )}
 

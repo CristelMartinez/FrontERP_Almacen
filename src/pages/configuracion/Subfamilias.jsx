@@ -11,12 +11,12 @@ import ModalSubfamiliasInactivas from "../../components/subfamilias/ModalSubfami
 import ModalImportarSubfamilias from "../../components/subfamilias/ModalImportarSubfamilia"
 
 export default function Subfamilias() {
-  const [subfamilias, setSubfamilias]               = useState([])
+  const [subfamilias, setSubfamilias] = useState([])
   const [subfamiliasInactivas, setSubfamiliasInactivas] = useState([])
-  const [modalNueva, setModalNueva]                 = useState(false)
-  const [modalInactivos, setModalInactivos]         = useState(false)
-  const [modalImportar, setModalImportar]           = useState(false)
-  const [subfamiliaEditar, setSubfamiliaEditar]     = useState(null) // ← nueva
+  const [modalNueva, setModalNueva] = useState(false)
+  const [modalInactivos, setModalInactivos] = useState(false)
+  const [modalImportar, setModalImportar] = useState(false)
+  const [subfamiliaEditar, setSubfamiliaEditar] = useState(null) // ← nueva
   const [subfamiliaEliminar, setSubfamiliaEliminar] = useState(null) // ← nueva
 
   const cargarSubfamilias = async () => {

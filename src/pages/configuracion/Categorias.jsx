@@ -142,7 +142,10 @@ export default function Categorias() {
         <ModalCategoriasInactivas categorias={categoriasInactivas} cerrar={() => setModalInactivas(false)} reactivar={reactivar} />
       )}
       {modalImportar && (
-        <ModalImportarCategorias cerrar={() => setModalImportar(false)} />
+        <ModalImportarCategorias
+          cargarCategorias={cargarCategorias}
+          cerrar={() => setModalImportar(false)}
+        />
       )}
     </CatalogoPage>
   )
