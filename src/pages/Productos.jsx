@@ -347,7 +347,7 @@ export default function Productos() {
         />
       )}
 
-      {modalImportar && (
+      {mostrarImportar && (
         <ModalImportarProductos
           cargarProductos={cargarProductos}
           cerrar={() => setModalImportar(false)}
