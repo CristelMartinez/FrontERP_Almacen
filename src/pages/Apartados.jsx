@@ -113,6 +113,8 @@ export default function Apartados() {
       a.folio?.toLowerCase().includes(q) ||
       a.usuario?.toLowerCase().includes(q) ||
       a.estado?.toLowerCase().includes(q) ||
+      a.numero_pedido?.toLowerCase().includes(q) ||
+      a.departamento?.toLowerCase().includes(q) ||
       new Date(a.fecha).toLocaleDateString().includes(q)
     )
   })
@@ -130,6 +132,22 @@ export default function Apartados() {
         <span className="font-mono text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
           {row.folio}
         </span>
+      ),
+    },
+    {
+      key: "numero_pedido",
+      label: "No. Pedido",
+      render: (row) => (
+        <span className="font-mono text-xs bg-gray-50 text-gray-600 px-2 py-0.5 rounded border border-gray-100">
+          {row.numero_pedido || "—"}
+        </span>
+      ),
+    },
+    {
+      key: "departamento",
+      label: "Departamento",
+      render: (row) => (
+        <span className="text-gray-600">{row.departamento || "—"}</span>
       ),
     },
     {
@@ -266,7 +284,7 @@ export default function Apartados() {
         />
         <input
           type="text"
-          placeholder="Buscar por folio, usuario o estado..."
+          placeholder="Buscar por folio, pedido, departamento, usuario o estado..."
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
           className="w-full pl-9 pr-9 py-2 text-sm bg-white border border-gray-200 rounded-lg text-gray-700 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition"

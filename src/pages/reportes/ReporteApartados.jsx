@@ -52,6 +52,13 @@ const columns = [
     ),
   },
   {
+    key: "departamento",
+    label: "Departamento",
+    render: (row) => (
+      <span className="text-xs text-gray-500">{row.departamento || "—"}</span>
+    ),
+  },
+  {
     key: "sku",
     label: "SKU",
     render: (row) => (
