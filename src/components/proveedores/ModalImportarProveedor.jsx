@@ -6,8 +6,8 @@ import { FiAlertCircle, FiCheckCircle } from "react-icons/fi"
 
 export default function ModalImportarProveedores({ cerrar, cargarProveedores }) {
 
-  const [archivo, setArchivo]   = useState(null)
-  const [errores, setErrores]   = useState([])
+  const [archivo, setArchivo] = useState(null)
+  const [errores, setErrores] = useState([])
   const [cargando, setCargando] = useState(false)
 
   const handleArchivo = (e) => {
@@ -65,7 +65,7 @@ export default function ModalImportarProveedores({ cerrar, cargarProveedores }) 
         </h2>
         <p className="text-xs text-gray-400 mt-1">
           Selecciona un archivo Excel (.xlsx) con la columna obligatoria:&nbsp;
-          <strong>Nombre</strong> y opcionales: <strong>Número de contacto, Dirección</strong>
+          <strong>Nombre</strong> y opcionales: <strong>Número de contacto, RFC</strong>
         </p>
       </div>
 

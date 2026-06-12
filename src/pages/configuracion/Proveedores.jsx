@@ -86,37 +86,44 @@ export default function Proveedores() {
   }
 
   const columns = [
-    { key: "nombre", label: "Nombre" },
-    {
-      key: "numero_contacto",
-      label: "Teléfono",
-      render: (row) => (
-        <span className="text-gray-400">{row.numero_contacto || "—"}</span>
-      ),
-    },
-    {
-      key: "acciones",
-      label: "Acciones",
-      render: (row) => (
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => setProveedorEditar(row)}
-            className="p-1.5 rounded-md text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition"
-            title="Editar"
-          >
-            <FiEdit2 size={14} />
-          </button>
-          <button
-            onClick={() => setProveedorEliminar(row)}
-            className="p-1.5 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition"
-            title="Desactivar"
-          >
-            <FiTrash2 size={14} />
-          </button>
-        </div>
-      ),
-    },
-  ]
+  { key: "nombre", label: "Nombre" },
+  {
+    key: "numero_contacto",
+    label: "Teléfono",
+    render: (row) => (
+      <span className="text-gray-400">{row.numero_contacto || "—"}</span>
+    ),
+  },
+  {
+    key: "rfc",
+    label: "RFC",
+    render: (row) => (
+      <span className="text-gray-400">{row.rfc || "—"}</span>
+    ),
+  },
+  {
+    key: "acciones",
+    label: "Acciones",
+    render: (row) => (
+      <div className="flex items-center gap-1">
+        <button
+          onClick={() => setProveedorEditar(row)}
+          className="p-1.5 rounded-md text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition"
+          title="Editar"
+        >
+          <FiEdit2 size={14} />
+        </button>
+        <button
+          onClick={() => setProveedorEliminar(row)}
+          className="p-1.5 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition"
+          title="Desactivar"
+        >
+          <FiTrash2 size={14} />
+        </button>
+      </div>
+    ),
+  },
+]
 
   return (
     <CatalogoPage
