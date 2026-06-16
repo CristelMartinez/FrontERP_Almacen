@@ -6,8 +6,8 @@ import { FiAlertCircle, FiCheckCircle } from "react-icons/fi"
 
 export default function ModalImportarProductos({ cerrar, cargarProductos }) {
 
-  const [archivo, setArchivo]   = useState(null)
-  const [errores, setErrores]   = useState([])
+  const [archivo, setArchivo] = useState(null)
+  const [errores, setErrores] = useState([])
   const [cargando, setCargando] = useState(false)
 
   const handleSeleccion = (e) => {
@@ -39,7 +39,7 @@ export default function ModalImportarProductos({ cerrar, cargarProductos }) {
           : `${insertados} productos importados correctamente`
 
       toast.success(`✅ ${texto}`)
-      cargarProductos()
+      cargarProductos()  
       cerrar()
 
     } catch (error) {

@@ -13,7 +13,8 @@ export default function ModalEditarProveedor({
   const [formData, setFormData] = useState({
     nombre: "",
     numero_contacto: "",
-    rfc: ""
+    rfc: "",
+    direccion: ""
   })
 
   useEffect(() => {
@@ -23,7 +24,8 @@ export default function ModalEditarProveedor({
       setFormData({
         nombre: proveedor.nombre || "",
         numero_contacto: proveedor.numero_contacto || "",
-        rfc: proveedor.rfc || ""
+        rfc: proveedor.rfc || "",
+        direccion: proveedor.direccion || ""
       })
 
     }
@@ -93,6 +95,13 @@ export default function ModalEditarProveedor({
           onChange={handleChange}
           placeholder="RFC del proveedor"
           maxLength={13}
+        />
+        <InputField
+          label="Dirección"
+          name="direccion"
+          value={formData.direccion}
+          onChange={handleChange}
+          placeholder="Dirección del proveedor (opcional)"
         />
 
       </div>

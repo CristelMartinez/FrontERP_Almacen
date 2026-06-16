@@ -102,6 +102,13 @@ export default function Proveedores() {
     ),
   },
   {
+    key: "direccion",
+    label: "Dirección",
+    render: (row) => (
+      <span className="text-gray-400">{row.direccion || "—"}</span>
+    ),
+  },
+  {
     key: "acciones",
     label: "Acciones",
     render: (row) => (

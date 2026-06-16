@@ -12,7 +12,8 @@ export default function ModalNuevoProveedor({
   const [formData, setFormData] = useState({
     nombre: "",
     numero_contacto: "",
-    rfc: ""
+    rfc: "",
+    direccion: ""
   })
 
   const handleChange = (e) => {
@@ -80,6 +81,13 @@ export default function ModalNuevoProveedor({
           onChange={handleChange}
           placeholder="RFC del proveedor"
           maxLength={13}
+        />
+        <InputField
+          label="Dirección"
+          name="direccion"
+          value={formData.direccion}
+          onChange={handleChange}
+          placeholder="Dirección del proveedor (opcional)"
         />
 
       </div>

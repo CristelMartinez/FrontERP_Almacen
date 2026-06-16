@@ -7,6 +7,13 @@ import ReporteLayout from "../../components/ReporteLayout"
 
 const columns = [
   {
+    key: "sku",
+    label: "SKU",
+    render: (row) => (
+      <span className="text-gray-800 font-medium text-sm">{row.sku}</span>
+    ),
+  },
+  {
     key: "nombre",
     label: "Producto",
     render: (row) => (
@@ -26,6 +33,22 @@ const columns = [
     render: (row) => (
       <span className="text-gray-700 font-medium">
         ${Number(row.precio).toLocaleString("es-MX", { minimumFractionDigits: 2 })}
+      </span>
+    ),
+  },
+  {
+    key: "stock",
+    label: "Stock",
+    render: (row) => (
+      <span className="text-xs text-gray-500">{row.stock}</span>
+    ),
+  },
+  {
+    key: "costo_total",
+    label: "Costo total",
+    render: (row) => (
+      <span className="text-gray-700 font-medium">
+        ${Number(row.costo_total).toLocaleString("es-MX", { minimumFractionDigits: 2 })}
       </span>
     ),
   },
