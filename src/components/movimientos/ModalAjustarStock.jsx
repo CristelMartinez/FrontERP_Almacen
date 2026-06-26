@@ -329,6 +329,7 @@ export default function ModalAjustarStock({ cerrar, recargar }) {
               </label>
               <input
                 type="number"
+                onWheel={(e) => e.currentTarget.blur()}
                 placeholder={ubicacionSel.esNueva ? "Cantidad inicial" : "Ej: 10 o -5"}
                 value={cantidad}
                 min={ubicacionSel.esNueva ? 1 : undefined}

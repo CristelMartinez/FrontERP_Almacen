@@ -267,9 +267,10 @@ export default function ModalEntradaMovimiento({ cerrar, recargar }) {
           </div>
 
           <InputField
-            label="Cantidad"
             name="cantidad"
+            label="Cantidad"
             type="number"
+            onWheel={(e) => e.currentTarget.blur()}
             min="1"
             value={producto.cantidad}
             onChange={handleProducto}
@@ -279,6 +280,7 @@ export default function ModalEntradaMovimiento({ cerrar, recargar }) {
             label="Costo de compra"
             name="costo_unitario"
             type="number"
+            onWheel={(e) => e.currentTarget.blur()}
             value={producto.costo_unitario}
             onChange={handleProducto}
           />

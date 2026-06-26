@@ -384,8 +384,9 @@ export default function ModalMovimiento({
                     </select>
 
                     <input
-                        type="number"
                         name="cantidad"
+                        type="number"
+                        onWheel={(e) => e.currentTarget.blur()}
                         placeholder="Cantidad"
                         value={detalle.cantidad}
                         onChange={handleDetalle}
@@ -393,8 +394,9 @@ export default function ModalMovimiento({
                     />
 
                     <input
-                        type="number"
                         name="costo_unitario"
+                        type="number"
+                        onWheel={(e) => e.currentTarget.blur()}
                         placeholder="Costo"
                         value={detalle.costo_unitario}
                         onChange={handleDetalle}

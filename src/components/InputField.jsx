@@ -6,7 +6,8 @@ export default function InputField({
   placeholder = "",
   type = "text",
   disabled = false,
-  className = ""
+  className = "",
+  ...rest
 }) {
   return (
     <div className="space-y-1.5">
@@ -21,6 +22,7 @@ export default function InputField({
         placeholder={placeholder}
         disabled={disabled}
         className={`w-full px-3 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed ${className}`}
+        {...rest}
       />
     </div>
   )

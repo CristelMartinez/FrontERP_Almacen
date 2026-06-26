@@ -357,6 +357,7 @@ export default function ModalSalidaMovimiento({ cerrar, recargar }) {
               <input
                 name="cantidad"
                 type="number"
+                onWheel={(e) => e.currentTarget.blur()}
                 min="1"
                 value={producto.cantidad}
                 onChange={handleProducto}

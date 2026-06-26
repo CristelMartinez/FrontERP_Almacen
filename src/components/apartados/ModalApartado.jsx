@@ -416,6 +416,7 @@ export default function ModalApartado({ cerrar, recargar }) {
           <input
             name="cantidad"
             type="number"
+            onWheel={(e) => e.currentTarget.blur()}
             min="1"
             value={producto.cantidad}
             onChange={handleProducto}
